@@ -4,7 +4,7 @@ namespace DesafioAPI.Dominio.Repositorio
 {
     public interface IUsuarioRepositorio
     {
-        Task AdicionarAsync(Usuario usuario);
-        Task<List<Usuario>> ListarTodosAsync();
+        Task AdicionarAsync(Usuario usuario);        
+        Task<List<Usuario>> ListarTodosAsync(int pageNumber, int pageSize);
     }
 }

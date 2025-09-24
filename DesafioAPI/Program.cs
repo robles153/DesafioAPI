@@ -2,11 +2,23 @@ using DesafioAPI.Infra.Percistencia;
 using DesafioAPI.Dominio.Repositorio;
 using DesafioAPI.Infra.Repositorio;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using MediatR;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Host.UseSerilog((context, services, configuration) =>
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .WriteTo.Console()
+);
 
+// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -17,6 +29,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Registro do repositório
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
+// Registro do MediatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+
+// Registro do RandomUserService
+builder.Services.AddHttpClient<DesafioAPI.Aplicacao.Servicos.RandomUserService>();
 
 var app = builder.Build();
 
