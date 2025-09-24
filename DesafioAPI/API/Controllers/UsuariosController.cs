@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MediatR;
+﻿using DesafioAPI.Aplicacao.Usuarios.AtualizarUsuario;
 using DesafioAPI.Aplicacao.Usuarios.ImportarUsuario;
 using DesafioAPI.Aplicacao.Usuarios.ListarUsuarios;
+using DesafioAPI.Aplicacao.Usuarios.ObterUsuarioPorId;
+using DesafioAPI.Aplicacao.Usuarios.RemoverUsuario;
+using DesafioAPI.Aplicacao.Usuarios.UsuarioViewModels;
 using DesafioAPI.Dominio.Entidades.Usuario;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioAPI.API.Controllers
 {
@@ -17,7 +21,7 @@ namespace DesafioAPI.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("importar-random")]
+        [HttpPost("importar-usuario")]
         public async Task<ActionResult<Usuario>> ImportarRandom()
         {
             var usuario = await _mediator.Send(new ImportarUsuarioRandomCommand());
@@ -25,10 +29,40 @@ namespace DesafioAPI.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Usuario>>> ListarUsuarios([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<List<UsuarioViewModel>>> ListarUsuarios([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var usuarios = await _mediator.Send(new ListarUsuariosQuery(pageNumber, pageSize));
             return Ok(usuarios);
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<UsuarioViewModel>> ObterPorId(Guid id)
+        {
+            var usuario = await _mediator.Send(new ObterUsuarioPorIdQuery(id));
+            if (usuario == null)
+                return NotFound();
+            return Ok(usuario);
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Atualizar(Guid id, [FromBody] AtualizarUsuarioCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest("O id da rota não confere com o id do corpo da requisição.");
+
+            var atualizado = await _mediator.Send(command);
+            if (!atualizado)
+                return NotFound();
+            return NoContent();
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Remover(Guid id)
+        {
+            var removido = await _mediator.Send(new RemoverUsuarioCommand(id));
+            if (!removido)
+                return NotFound();
+            return NoContent();
         }
     }
 }

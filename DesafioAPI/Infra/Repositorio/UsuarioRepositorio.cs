@@ -28,5 +28,38 @@ namespace DesafioAPI.Infra.Repositorio
                 .Take(pageSize)
                 .ToListAsync();
         }
+
+        public async Task<Usuario?> ObterPorIdAsync(Guid id)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<bool> RemoverUsuarioAsync(Guid id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+                return false;
+
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> AtualizarUsuarioAsync(Usuario usuario)
+        {
+            var usuarioExistente = await _context.Usuarios.FindAsync(usuario.Id);
+            if (usuarioExistente == null)
+                return false;
+            
+            usuarioExistente.AtualizarDadosUsuario(
+                usuario.Email,
+                usuario.Telefone,
+                usuario.Celular,
+                usuario.FotoUrl,
+                usuario.Nacionalidade
+            );
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

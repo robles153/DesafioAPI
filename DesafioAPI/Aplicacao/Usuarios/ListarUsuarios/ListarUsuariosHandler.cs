@@ -2,10 +2,11 @@
 using DesafioAPI.Dominio.Repositorio;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using DesafioAPI.Aplicacao.Usuarios.UsuarioViewModels;
 
 namespace DesafioAPI.Aplicacao.Usuarios.ListarUsuarios
 {
-    public class ListarUsuariosHandler : IRequestHandler<ListarUsuariosQuery, List<Usuario>>
+    public class ListarUsuariosHandler : IRequestHandler<ListarUsuariosQuery, List<UsuarioViewModel>>
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly ILogger<ListarUsuariosHandler> _logger;
@@ -16,7 +17,7 @@ namespace DesafioAPI.Aplicacao.Usuarios.ListarUsuarios
             _logger = logger;
         }
 
-        public async Task<List<Usuario>> Handle(ListarUsuariosQuery request, CancellationToken cancellationToken)
+        public async Task<List<UsuarioViewModel>> Handle(ListarUsuariosQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Listando usuários. Página: {PageNumber}, Tamanho: {PageSize}", request.PageNumber, request.PageSize);
 
@@ -24,7 +25,7 @@ namespace DesafioAPI.Aplicacao.Usuarios.ListarUsuarios
 
             _logger.LogInformation("Total de usuários retornados: {Count}", usuarios.Count);
 
-            return usuarios;
+            return usuarios.Select(u => new UsuarioViewModel(u)).ToList();
         }
     }
 }

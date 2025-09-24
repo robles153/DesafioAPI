@@ -32,5 +32,14 @@ namespace DesafioAPI.Dominio.Entidades.Usuario
         public string Celular { get; set; } = string.Empty;
         public string FotoUrl { get; set; } = string.Empty;
         public string Nacionalidade { get; set; } = string.Empty;
+
+        public void AtualizarDadosUsuario(string email, string telefone, string celular, string fotoUrl, string nacionalidade)
+        {
+            Email = email;
+            Telefone = telefone;
+            Celular = celular;
+            FotoUrl = fotoUrl;
+            Nacionalidade = nacionalidade;
+        }
     }
 }

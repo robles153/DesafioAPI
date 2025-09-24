@@ -1,9 +1,9 @@
-﻿using DesafioAPI.Dominio.Entidades.Usuario;
-using MediatR;
+﻿using MediatR;
+using DesafioAPI.Aplicacao.Usuarios.UsuarioViewModels;
 
 namespace DesafioAPI.Aplicacao.Usuarios.ListarUsuarios
 {
-    public class ListarUsuariosQuery : IRequest<List<Usuario>>
+    public class ListarUsuariosQuery : IRequest<List<UsuarioViewModel>>
     {
         public int PageNumber { get; }
         public int PageSize { get; }
