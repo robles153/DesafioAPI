@@ -11,7 +11,7 @@ namespace DesafioAPI.Aplicacao.Usuarios.UsuarioViewModels
         public string NomeUsuario { get; set; } = string.Empty;
         public string Pais { get; set; } = string.Empty;
         public string Genero { get; set; } = string.Empty;
-        public string DataNascimento { get; set; } = string.Empty; // Alterado para string
+        public string DataNascimento { get; set; } = string.Empty; 
         public string Telefone { get; set; } = string.Empty;
         public string Celular { get; set; } = string.Empty;
         public string FotoUrl { get; set; } = string.Empty;

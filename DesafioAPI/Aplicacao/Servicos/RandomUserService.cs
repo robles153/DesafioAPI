@@ -17,7 +17,7 @@ namespace DesafioAPI.Aplicacao.Servicos
             _logger = logger;
         }
 
-        public async Task<RandomUserDto?> GetRandomUserAsync()
+        public virtual async Task<RandomUserDto?> GetRandomUserAsync()
         {
             try
             {

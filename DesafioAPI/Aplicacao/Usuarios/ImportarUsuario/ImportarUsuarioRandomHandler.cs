@@ -3,7 +3,6 @@ using DesafioAPI.Dominio.Entidades.Usuario;
 using DesafioAPI.Aplicacao.Mappers;
 using DesafioAPI.Dominio.Repositorio;
 using DesafioAPI.Aplicacao.Servicos;
-using Microsoft.Extensions.Logging;
 
 namespace DesafioAPI.Aplicacao.Usuarios.ImportarUsuario
 {
