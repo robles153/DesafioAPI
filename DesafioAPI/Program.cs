@@ -4,6 +4,9 @@ using DesafioAPI.Infra.Repositorio;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using MediatR;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using DesafioAPI.Aplicacao.Usuarios.AtualizarUsuario; // <- para achar o Validator
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -20,6 +23,11 @@ builder.Host.UseSerilog((context, services, configuration) =>
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// Registro do FluentValidation (novo jeito)
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<AtualizarUsuarioDtoValidator>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
