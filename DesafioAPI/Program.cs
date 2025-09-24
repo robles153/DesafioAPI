@@ -44,6 +44,8 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Pr
 // Registro do RandomUserService
 builder.Services.AddHttpClient<DesafioAPI.Aplicacao.Servicos.RandomUserService>();
 
+builder.Services.AddScoped<DesafioAPI.Aplicacao.Servicos.ExportacaoUsuarioExcelService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
