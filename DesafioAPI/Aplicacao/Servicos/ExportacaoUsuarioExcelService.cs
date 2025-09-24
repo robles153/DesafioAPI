@@ -22,6 +22,8 @@ namespace DesafioAPI.Aplicacao.Servicos
             worksheet.Cell(1, 9).Value = "Celular";
             worksheet.Cell(1, 10).Value = "Nacionalidade";
 
+            worksheet.Range("A1:J1").Style.Font.SetBold();
+
             // Dados 
             for (int i = 0; i < usuarios.Count; i++)
             {
@@ -37,6 +39,9 @@ namespace DesafioAPI.Aplicacao.Servicos
                 worksheet.Cell(i + 2, 9).Value = u.Celular;
                 worksheet.Cell(i + 2, 10).Value = u.Nacionalidade;
             }
+
+            // Ajustar largura das colunas
+            worksheet.Columns().AdjustToContents();
 
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
