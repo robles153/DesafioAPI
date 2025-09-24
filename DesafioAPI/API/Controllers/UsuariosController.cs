@@ -1,4 +1,5 @@
-﻿using DesafioAPI.Aplicacao.Usuarios.AtualizarUsuario;
+﻿using DesafioAPI.Aplicacao.DTOs;
+using DesafioAPI.Aplicacao.Usuarios.AtualizarUsuario;
 using DesafioAPI.Aplicacao.Usuarios.ImportarUsuario;
 using DesafioAPI.Aplicacao.Usuarios.ListarUsuarios;
 using DesafioAPI.Aplicacao.Usuarios.ObterUsuarioPorId;
@@ -40,19 +41,25 @@ namespace DesafioAPI.API.Controllers
         {
             var usuario = await _mediator.Send(new ObterUsuarioPorIdQuery(id));
             if (usuario == null)
-                return NotFound();
+                return NotFound(new { mensagem = "Usuário não encontrado ou não existe." });
             return Ok(usuario);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Atualizar(Guid id, [FromBody] AtualizarUsuarioCommand command)
+        public async Task<IActionResult> Atualizar(Guid id, [FromBody] AtualizarUsuarioDto dto)
         {
-            if (id != command.Id)
-                return BadRequest("O id da rota não confere com o id do corpo da requisição.");
+            var command = new AtualizarUsuarioCommand(
+                id,
+                dto.Email ?? string.Empty,
+                dto.Telefone ?? string.Empty,
+                dto.Celular ?? string.Empty,
+                dto.FotoUrl ?? string.Empty,
+                dto.Nacionalidade ?? string.Empty
+            );
 
             var atualizado = await _mediator.Send(command);
             if (!atualizado)
-                return NotFound();
+                return NotFound(new { mensagem = "Usuário não encontrado ou não existe." });
             return NoContent();
         }
 
@@ -61,8 +68,9 @@ namespace DesafioAPI.API.Controllers
         {
             var removido = await _mediator.Send(new RemoverUsuarioCommand(id));
             if (!removido)
-                return NotFound();
-            return NoContent();
+                return NotFound(new { mensagem = "Usuário não encontrado ou não existe." });
+
+            return Ok(new { mensagem = $"Usuário de id {id} foi removido com sucesso." });
         }
     }
 }
